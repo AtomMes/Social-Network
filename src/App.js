@@ -1,31 +1,43 @@
-import React from "react";
-import Sidebar from "./components/Sidebar";
+import React, { useContext } from "react";
 import Navbar from "./components/Navbar";
-import Feed from "./components/Feed";
-import RightBar from "./components/RightBar";
 import Add from "./components/Add";
-import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
-
+import { Box, createTheme, ThemeProvider } from "@mui/material";
+import Home from "./pages/Home";
+import { Route, Routes } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import { AuthContext } from "./context/AuthContext";
+import Chat from './pages/Chat'
 
 function App() {
-  const [mode, setMode] = React.useState('light')
-  
+  const [mode, setMode] = React.useState("light");
+
   const darkTheme = createTheme({
-    palette:{
-      mode:mode
-    }
-  })
+    palette: {
+      mode: mode,
+    },
+  });
+
+  const { currentUser } = useContext(AuthContext);
+
+  console.log(currentUser);
+
+
   return (
-    <ThemeProvider theme={darkTheme} >
-    <Box className="App" bgcolor={"background.default"}  color={'text.primary'} >
-      <Navbar />
-      <Stack spacing={1} direction="row" justifyContent="space-between">
-        <Sidebar setMode={setMode} />
-        <Feed />
-        <RightBar />
-      </Stack>
-      <Add />
-    </Box>
+    <ThemeProvider theme={darkTheme}>
+      <Box
+        className="App"
+        bgcolor={"background.default"}
+        color={"text.primary"}
+      >
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home setMode={setMode} mode={mode} />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/Chat" element={<Chat />} />
+        </Routes>
+      </Box>
     </ThemeProvider>
   );
 }
